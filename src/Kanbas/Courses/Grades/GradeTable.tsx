@@ -1,81 +1,47 @@
+import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
+import { enrollments } from "../../Database";
+import { users } from "../../Database";
+import { grades } from "../../Database";
+import { assignments } from "../../Database";
+
 export default function GradeTable() {
+    const { cid } = useParams();
+    const courseAssignment = assignments.filter((assignment) => assignment.course === cid);
+    const enrolledStudents = enrollments.filter((enrollment) => enrollment.course === cid);
+    const userID = enrolledStudents.map((enrollment) => enrollment.user);
+    const students = users.filter((user) => userID.includes(user._id));
+    const studentGrades = grades.filter((grade) => userID.includes(grade.student));
     return (
         <div id="wd-grade-table" className="table-responsive">
             <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th scope="col" className="align-middle">Student Name</th>
-                        <th scope="col">
+                        {courseAssignment.map((assignment) => (
+                        <th scope="col" key={assignment._id}>
                             <ul className="list-unstyled text-center align-middle m-0">
-                                <li >A1 SETUP</li>
+                                <li >{assignment.title}</li>
                                 <li className="fw-light"><small>Out of 100</small></li>
                             </ul>
-                        </th>
-                        <th scope="col">
-                            <ul className="list-unstyled text-center align-middle m-0">
-                                <li >A2 HTML</li>
-                                <li className="fw-light"><small>Out of 100</small></li>
-                            </ul>
-                        </th>
-                        <th scope="col">
-                            <ul className="list-unstyled text-center align-middle m-0">
-                                <li >A3 CSS</li>
-                                <li className="fw-light"><small>Out of 100</small></li>
-                            </ul>
-                        </th>
-                        <th scope="col">
-                            <ul className="list-unstyled text-center align-middle m-0">
-                                <li >A4 BOOTSTRAP</li>
-                                <li className="fw-light"><small>Out of 100</small></li>
-                            </ul>
-                        </th>
+                        </th>))}
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Jane Adams</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">96.67%</td>
-                        <td className="text-center align-middle">92.18%</td>
-                        <td className="text-center align-middle">66.22%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Christina Allen</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">100%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Samreen Ansari</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">92.18%</td>
-                        <td className="text-center align-middle">66.22%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Han Bao</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">
-                            <input className="form-control text-center align-middle border-0" value={"98.34%"} />
+                    {students.map((student) =>(
+                    <tr key={student._id}>
+                    <td className="text-danger align-middle" scope="row">{`${student.firstName} ${student.lastName}`}</td>
+                    {courseAssignment.map((assignment) => {
+                      const thisGrade = studentGrades.find((grade) => grade.student === student._id && grade.assignment === assignment._id);
+                      return (
+                        <td key={assignment._id} className="text-center align-middle">
+                          {thisGrade ? `${thisGrade.grade}%` : 'N/A'}
                         </td>
-                        <td className="text-center align-middle">92.18%</td>
-                        <td className="text-center align-middle">100%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Mahi Sai Srinivas Bobbili</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">96.67%</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">88.65%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger align-middle" scope="row">Siran Cao</td>
-                        <td className="text-center align-middle">100%</td>
-                        <td className="text-center align-middle">96.67%</td>
-                        <td className="text-center align-middle">92.01%</td>
-                        <td className="text-center align-middle">100%</td>
-                    </tr>
+                      );
+                    })}
+                  </tr>
+                ))}
+                    
                 </tbody>
             </table>
         </div>

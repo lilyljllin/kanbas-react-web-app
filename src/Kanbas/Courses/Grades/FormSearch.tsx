@@ -1,6 +1,17 @@
 import { CiSearch } from "react-icons/ci";
 import { FiFilter } from "react-icons/fi";
+import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
+import { enrollments } from "../../Database";
+import { users } from "../../Database";
+import { grades } from "../../Database";
+import { assignments } from "../../Database";
 export default function FormSearch() {
+    const { cid } = useParams();
+    const courseAssignment = assignments.filter((assignment) => assignment.course === cid);
+    const enrolledStudents = enrollments.filter((enrollment) => enrollment.course === cid);
+    const userID = enrolledStudents.map((enrollment) => enrollment.user);
+    const students = users.filter((user) => userID.includes(user._id));
+    const studentGrades = grades.filter((grade) => userID.includes(grade.student));
     return(
         <div>
             <form>
@@ -17,7 +28,9 @@ export default function FormSearch() {
                             </div>
                             <select className="form-select">
                                 <option selected>Search Students</option>
-                                <option value="student1">student 1</option>
+                                {students.map(student => (
+                                <option value="student1">{`${student.firstName} ${student.lastName}`}</option>
+                                ))}
                                 </select>
                         </div>
                         </div>
@@ -33,7 +46,9 @@ export default function FormSearch() {
                             </div>
                             <select className="form-select">
                                 <option selected>Search Assignments</option>
-                                <option value="student1">A1</option>
+                                {courseAssignment.map(assignment =>(
+                                <option value="student1">{assignment.title}</option>
+                                ))}
                                 </select>
                         </div>
                     </div>

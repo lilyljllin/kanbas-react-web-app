@@ -5,7 +5,13 @@ import EndIcons from "./EndIcons";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { GoTriangleDown } from "react-icons/go";
+import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
+import { assignments, courses } from "../../Database";
+import { Link } from "react-router-dom";
 export default function Assignments() {
+  const { cid } = useParams();
+  const courseAssignment = assignments.filter((assignment) => assignment.course === cid);
+
   return (
     <div id="wd-assignments" className="d-flex flex-column">
       <div className="mb-3">
@@ -25,84 +31,33 @@ export default function Assignments() {
           </div>
 
           <ul className="wd-assignment list-group rounded-0">
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1" style={{ borderLeft: '4px solid green' }}>
-              <div className=" d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <TbNotebook className="me-2 fs-3 text-success" />
-                <div>
-                  <a className="wd-assignment-link text-dark fw-bold"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
-                    A1
-                  </a>
-                  <ul className="list-inline">
-                    <li className="list-inline-item fs-6 text-danger">Multiple Modules</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6 fw-bold">Not available until</li>
-                    <li className="list-inline-item fs-6">May 6 at 12:00am</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <br />
-                    <li className="list-inline-item fs-6 fw-bold">Due</li>
-                    <li className="list-inline-item fs-6">May 13 at 11:59pm</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6">100pts</li>
-                  </ul>
-                </div>
-                <EndIcons/>
-              </div>
-              
-              
-            </li>
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1" style={{ borderLeft: '4px solid green' }}>
-              <div className=" d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <TbNotebook className="me-2 fs-3 text-success" />
-                <div>
-                  <a className="wd-assignment-link text-dark fw-bold"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
-                    A2
-                  </a>
-                  <ul className="list-inline">
-                    <li className="list-inline-item fs-6 text-danger">Multiple Modules</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6 fw-bold">Not available until</li>
-                    <li className="list-inline-item fs-6">May 13 at 12:00am</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <br />
-                    <li className="list-inline-item fs-6 fw-bold">Due</li>
-                    <li className="list-inline-item fs-6">May 20 at 11:59pm</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6">100pts</li>
-                  </ul>
-                </div>
-                <EndIcons />
-              </div>
-            </li>
-
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1" style={{ borderLeft: '4px solid green' }}>
-              <div className=" d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-3" />
-                <TbNotebook className="me-2 fs-3 text-success" />
-                <div>
-                  <a className="wd-assignment-link text-dark fw-bold"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
-                    A3
-                  </a>
-                  <ul className="list-inline">
-                    <li className="list-inline-item fs-6 text-danger">Multiple Modules</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6 fw-bold">Not available until</li>
-                    <li className="list-inline-item fs-6">May 20 at 12:00am</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <br />
-                    <li className="list-inline-item fs-6 fw-bold">Due</li>
-                    <li className="list-inline-item fs-6">May 27 at 11:59pm</li>
-                    <li className="list-inline-item fs-6">|</li>
-                    <li className="list-inline-item fs-6">100pts</li>
-                  </ul>
-                </div>
-                <EndIcons />
-              </div>
-            </li>
+            {courseAssignment.map((assignment) => (
+              <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} 
+              className="text-decoration-none">
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1" style={{ borderLeft: '4px solid green' }}>
+                  <div className=" d-flex align-items-center">
+                    <BsGripVertical className="me-2 fs-3" />
+                    <TbNotebook className="me-2 fs-3 text-success" />
+                    <div>
+                      <span className="wd-assignment-link" style={{ textDecoration: "none", color: "black", fontWeight: "bold" }}>
+                        {assignment.title}
+                      </span>
+                      <ul className="list-inline">
+                        <li className="list-inline-item fs-6 text-danger">Multiple Modules</li>
+                        <li className="list-inline-item fs-6">|</li>
+                        <li className="list-inline-item fs-6 fw-bold">Not available until</li>
+                        <li className="list-inline-item fs-6">May 6 at 12:00am</li>
+                        <li className="list-inline-item fs-6">|</li>
+                        <br />
+                        <li className="list-inline-item fs-6 fw-bold">Due</li>
+                        <li className="list-inline-item fs-6">May 13 at 11:59pm</li>
+                        <li className="list-inline-item fs-6">|</li>
+                        <li className="list-inline-item fs-6">100pts</li>
+                      </ul>
+                    </div>
+                    <EndIcons />
+                  </div>
+                </li> </Link>))}
           </ul>
         </li>
       </ul>

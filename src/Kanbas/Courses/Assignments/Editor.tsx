@@ -1,16 +1,21 @@
+import { Navigate, Route, Routes, useParams, useLocation, useNavigate } from "react-router";
+import { assignments, courses } from "../../Database";
 export default function AssignmentEditor() {
+  const { cid, id } = useParams();
+  const courseAssignment = assignments.filter((assignment) => assignment.course === cid && assignment._id === id);
+  const navigate = useNavigate();
+  const buttonHandler = () => navigate(`/Kanbas/Courses/${cid}/Assignments`);
   return (
     <div id="wd-assignments-editor">
-      <form>
+     {courseAssignment.map( (assignment) => (
+     <form>
         <div className="mb-3">
           <label htmlFor="wd-name" className="form-label">Assignment Name</label>
-          <input id="wd-name" className="form-control" value="A1" />
+          <input id="wd-name" className="form-control" value={assignment.title} />
         </div>
 
         <div className="mb-3">
           <textarea id="wd-description" className="form-control">
-            The assignment is available online.
-            Submit a link to the landing page of
           </textarea>
         </div>
         <div className="mb-3 row">
@@ -119,8 +124,8 @@ export default function AssignmentEditor() {
             </div>
           </div>
         </div>
-       
-  
+        
+
 
 
 
@@ -128,15 +133,15 @@ export default function AssignmentEditor() {
         <hr />
         <div className="d-flex float-end">
           <div className="w-50 me-2">
-            <button className="btn btn-lg btn-secondary w-100" id="wd-cancel-button">Cancel</button>
+            <button className="btn btn-lg btn-secondary w-100" id="wd-cancel-button" onClick={buttonHandler}>Cancel</button>
           </div>
           <div className="w-50">
-            <button className="btn btn-lg btn-danger 1-100" id="wd-save-button">Save</button>
+            <button className="btn btn-lg btn-danger 1-100" id="wd-save-button" onClick={buttonHandler}>Save</button>
           </div>
         </div>
 
 
-      </form>
+      </form>))}
     </div>
 
   );
