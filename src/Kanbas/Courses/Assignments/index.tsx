@@ -6,18 +6,19 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { GoTriangleDown } from "react-icons/go";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
-import { assignments, courses } from "../../Database";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAssignment } from "./reducer";
 export default function Assignments() {
   const { cid } = useParams();
-  const courseAssignment = assignments.filter((assignment) => assignment.course === cid);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const dispatch = useDispatch();
 
   return (
     <div id="wd-assignments" className="d-flex flex-column">
       <div className="mb-3">
-      <AssignmentTopButtons />
+        <AssignmentTopButtons />
       </div>
-      
 
       <ul id="wd-assignment" className="list-group rounded-0">
         <li className="wd-assignments-title  list-group-item p-0 mb-5 fs-5 border-gray" >
@@ -31,9 +32,11 @@ export default function Assignments() {
           </div>
 
           <ul className="wd-assignment list-group rounded-0">
-            {courseAssignment.map((assignment) => (
-              <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} 
-              className="text-decoration-none">
+            {assignments
+            .filter((assignment: any) => assignment.course === cid)
+            .map((assignment: any) => (
+              <Link key={assignment._id} to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                className="text-decoration-none">
                 <li className="wd-assignment-list-item list-group-item p-3 ps-1" style={{ borderLeft: '4px solid green' }}>
                   <div className=" d-flex align-items-center">
                     <BsGripVertical className="me-2 fs-3" />
@@ -55,7 +58,7 @@ export default function Assignments() {
                         <li className="list-inline-item fs-6">100pts</li>
                       </ul>
                     </div>
-                    <EndIcons />
+                    <EndIcons assignmentTitle = {assignment.title} aID={assignment._id}/>
                   </div>
                 </li> </Link>))}
           </ul>

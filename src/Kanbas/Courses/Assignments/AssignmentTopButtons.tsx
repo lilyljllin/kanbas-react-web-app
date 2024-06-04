@@ -1,10 +1,19 @@
 import { FaPlus } from "react-icons/fa6";
-import { CiSearch } from "react-icons/ci";
+import { CiDatabase, CiSearch } from "react-icons/ci";
+import { addAssignment } from "./reducer";
+import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
 export default function AssignmentTopButtons() {
+    const { cid } = useParams();
+    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const buttonHandler = () => navigate(`/Kanbas/Courses/${cid}/Assignments/0`);
     return (
         <div id="wd-assignment-top-buttons" className="text-nowrap">
-            <button id="wd-add-assignment-btn" className="btn btn-lg btn-danger me-1 float-end">
+            <button id="wd-add-assignment-btn" className="btn btn-lg btn-danger me-1 float-end"
+            onClick={buttonHandler}>
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                 Assignment
             </button>
