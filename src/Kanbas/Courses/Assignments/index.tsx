@@ -49,13 +49,13 @@ export default function Assignments() {
                         <li className="list-inline-item fs-6 text-danger">Multiple Modules</li>
                         <li className="list-inline-item fs-6">|</li>
                         <li className="list-inline-item fs-6 fw-bold">Not available until</li>
-                        <li className="list-inline-item fs-6">May 6 at 12:00am</li>
+                        <li className="list-inline-item fs-6">{`${assignment.availableFrom.replace(/-/g, "/")} at 12:00am`}</li>
                         <li className="list-inline-item fs-6">|</li>
                         <br />
                         <li className="list-inline-item fs-6 fw-bold">Due</li>
-                        <li className="list-inline-item fs-6">May 13 at 11:59pm</li>
+                        <li className="list-inline-item fs-6">{`${assignment.dueDate.replace(/-/g, "/")} at 11:59pm`}</li>
                         <li className="list-inline-item fs-6">|</li>
-                        <li className="list-inline-item fs-6">100pts</li>
+                        <li className="list-inline-item fs-6">{`${assignment.points}pts`}</li>
                       </ul>
                     </div>
                     <EndIcons assignmentTitle = {assignment.title} aID={assignment._id}/>
