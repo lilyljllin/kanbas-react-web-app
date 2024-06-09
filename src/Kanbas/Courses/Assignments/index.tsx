@@ -8,11 +8,22 @@ import { GoTriangleDown } from "react-icons/go";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment , setAssignments, addAssignment } from "./reducer";
+import { useState, useEffect} from "react";
+import * as client from "./client";
+ 
 export default function Assignments() {
   const { cid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const dispatch = useDispatch();
+  const fetchAssignment = async() => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignment();
+  }, []);
+
 
   return (
     <div id="wd-assignments" className="d-flex flex-column">

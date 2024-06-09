@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useParams, useLocation, useNavigate } from "re
 import { addAssignment, updateAssignment } from "./reducer";
 import { useSelector, useDispatch} from "react-redux";
 import { useState } from "react";
+import * as client from "./client";
 
 export default function AssignmentEditor() {
   const { cid, id } = useParams();
@@ -10,9 +11,17 @@ export default function AssignmentEditor() {
   points: 100, dueDate: "2024-06-01", availableFrom: "2024-05-01", availableTo: "2024-07-01"} : assignments.find((assignment: any) => assignment.course === cid && assignment._id === id)))
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const createAssignment = async (assignment: any) => {
+    const newAssignment = await client.createAssignmentsForCourse(cid as string, assignment);
+    dispatch(addAssignment(newAssignment));
+  }
+  const saveAssignment = async (assignment: any) => {
+    const status = await client.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  }
   const buttonHandler = () => navigate(`/Kanbas/Courses/${cid}/Assignments`);
-  const addingAssignment = () => {dispatch(addAssignment(assignment)); buttonHandler()};
-  const updatingAssignment = () => {dispatch(updateAssignment(assignment)); buttonHandler()};
+  const addingAssignment = () => {createAssignment(assignment); buttonHandler()};
+  const updatingAssignment = () => {saveAssignment(assignment); buttonHandler()};
   return (
     <div id="wd-assignments-editor">
      
